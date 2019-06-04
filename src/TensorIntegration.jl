@@ -8,8 +8,8 @@ module TensorIntegration
         if N > 1
             xs = collect(range(a, b, length=N))
             ws = ones(N)
-            ws[2:2:end-1].=4
-            ws[3:2:end-2].=2
+            ws[2:2:end-1] .= 4.0
+            ws[3:2:end-2] .= 2.0
             ws = ws*(xs[2]-xs[1])/3.
         else
             xs = [(a+b)/2.]
@@ -31,7 +31,7 @@ module TensorIntegration
             end
         end
 
-        xs = Array{Vector{numbertype}}(d)
+        xs = [zeros(numbertype, N[d]) for i = 1:d] 
         for i in 1:d
             if N[i] > 1
                 xs[i] = collect(range(a[i], b[i], length = N[i]))
@@ -39,13 +39,13 @@ module TensorIntegration
                 xs[i] = [(a[i]+b[i])/2.]
             end
         end
-        ws = Array{Vector{numbertype}}(d)
+        ws = [zeros(numbertype, N[d]) for i = 1:d] 
         for i in 1:d
             if N[i] > 1
                 ws[i] = ones(N[i])
-                ws[i][2:2:end-1]=4
-                ws[i][3:2:end-2]=2
-                ws[i] = ws[i]*(xs[i][2]-xs[i][1])/3.
+                ws[i][2:2:end-1] .= 4.0
+                ws[i][3:2:end-2] .= 2.0
+                ws[i] .= ws[i].*(xs[i][2]-xs[i][1])./3.
             else
                 ws[i] = [1.]
             end
@@ -57,26 +57,26 @@ module TensorIntegration
     function tensor_integrate(xs, ws, N)
         totN = prod(N)
         d = length(N)
-        xmat = Array{eltype(xs[1])}(totN,d)
-        wmat = Array{eltype(ws[1])}(totN,d)
+        xmat = zeros(eltype(xs[1]), totN, d) 
+        wmat = zeros(eltype(xs[1]), totN, d)
         for i in 1:d
             repout = Int(totN/prod(N[1:i]))
             repin = Int(totN/N[i]/repout)
-            xmat[:, i] = repeat(xs[i], inner=repin, outer=repout)
-            wmat[:, i] = repeat(ws[i], inner=repin, outer=repout)
+            xmat[:, i] .= repeat(xs[i], inner=repin, outer=repout)
+            wmat[:, i] .= repeat(ws[i], inner=repin, outer=repout)
         end
-        w = prod(wmat, 2)
+        w = prod(wmat, dims = 2)
         return xmat, w
     end
 
     function make_tensor(xs, N)
         totN = prod(N)
         d = length(N)
-        xmat = Array{eltype(xs[1])}(totN,d)
+        xmat = zeros(eltype(xs[1]), totN, d) 
         for i in 1:d
             repout = Int(totN/prod(N[1:i]))
             repin = Int(totN/N[i]/repout)
-            xmat[:, i] = repeat(xs[i], inner=repin, outer=repout)
+            xmat[:, i] .= repeat(xs[i], inner=repin, outer=repout)
         end
         return xmat
     end

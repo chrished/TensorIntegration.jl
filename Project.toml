@@ -1,0 +1,13 @@
+name = "TensorIntegration"
+uuid = "7240635e-86d1-11e9-0848-7d3fbbdcb705"
+authors = ["Christoph Hedtrich"]
+version = "0.1.0"
+
+[compat]
+julia = "1.1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]

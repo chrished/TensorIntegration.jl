@@ -3,6 +3,9 @@ uuid = "7240635e-86d1-11e9-0848-7d3fbbdcb705"
 authors = ["Christoph Hedtrich"]
 version = "0.1.0"
 
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+
 [compat]
 julia = "1.1"
 
